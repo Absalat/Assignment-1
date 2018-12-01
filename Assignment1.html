@@ -1,0 +1,425 @@
+<html>
+<Title> Assignment 1 </Title>
+<head> <H1> <b> REVIEW QUESTION <BR>
+PREPARED BY: ABSALAT DAWIT<BR>
+ID NUMBER: ATR/8266/08
+ASSIGNMENT 1 </b> </H1> </head>
+<body>
+<p>
+<h2> <b> Title: Trigger </h2> </b> 
+<br>
+<b>Description: </b> 
+<br>
+A database trigger is special stored procedure that is run when specific actions occur within a database.  Most triggers are defined to run when changes are made to a table’s data.  Triggers can be defined to run instead of or after DML (Data Manipulation Language) actions such as INSERT, UPDATE, and DELETE.
+<br>
+<b>Implementation: </b>
+<br>
+An example of Trigger implementation can be:
+<br>
+CREATE TRIGGER [student].[name] ON [student].[Order]
+<br>
+AFTER INSERT AS
+<br>
+BEGIN
+<br>
+DELARE @count int;
+<br>
+SET @count -- @rowcount;
+<br>
+IF @count -  0
+<br>
+     RETURN;
+<br>
+BEGIN TRY
+<br>
+               INSERT INTO [student].[Grade](
+                   <br>
+		[Name]
+        <br>
+		,[ID]
+        <br>
+
+		,[Courses])
+<br>	
+	SELECT
+	<br>	Inserted.[ID]
+	<br> FROM inserted;
+    <br>
+END TRY
+<br>
+
+
+<b>Code Explanation:</b> <br>
+1.	The CREATE Statement – It defines which table is associated with the trigger. In addition, this statement is used to specify when the trigger executes (e.g. after insert).<br>
+2.	The actual program - This program runs whenever one or more rows are inserted into the Order table.<br>
+3.	Special database objects – Triggers use specially defined databases objects such as INSERTED, or DELETED to access records affected by the database action.<br>
+4.	The trigger is using the INSERTED object to gain access to the newly created rows. The INSERT statement is used to table those rows and add them to a history table.<br>
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> <b>Title: Table </h2></b> <br> 
+<b>Description:</b> <br>
+Table is a database object used to create a table in database. <br>
+<b>Implementation: </b> <br>
+An example of Table implementation can be: <br>
+CREATE TABLE Student <br>
+		(name varchar(20), <br>
+		ID int(5) <br>
+		Department varchar(20)); <br>
+<b>Code Explanation: </b> <br>
+This above code will create a table named student with name, ID and department as it’s entity with the specified datatype and size. 
+ <br>
+ <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> <b> Title: View </h2> </b> <br> 
+<b>Description: </b> <br> 
+View is a database object used to create a view in database. A view a logical view of the table that has been created. <br>
+<b>Implementation:</b> <br>
+An example of View implementation can be: <br>
+CREATE VIEW grade <br>
+		AS SELECT student_id ID_NUMBER, last_name NAME, <br>
+		Grade*4 CGPA <br>
+		FROM student <br>
+		WHERE department = ‘ITSC’; <br>
+
+<b> Code Explanation: </b> <br> 
+A view doesn’t contain a data of its own. It acts like a window from which the data in the table can be viewed from. The above code stores a SELECT statement. 
+
+<br>
+<br>
+
+
+
+
+
+
+
+
+<h2> <b>Title: Sequence </h2> </b> <br>  
+<b>Description: </b> <br>
+Sequence is a database object used to create a sequence in database. Sequence is a user created database object that can be shared between multiple user to generate a unique integer. It’s usually used to create a primary key value, which unique for each row. 
+<br>
+<b>Implementation: </b> <br>
+An example of Sequence implementation can be: <br>
+CREATE SEQUENCE Student_ID <br>
+
+		INCREMENT BY 1; <br>
+		START WITH 99; <br>
+		MAXVALUE 1000;<br>
+
+		NOCACHE <br>
+		NOCYCLE; <br>
+		
+<b>Code Explanation: </b> <br> 
+This above code will create a sequence, the will be on the student id, with it being incremented by one. Starting at 99 and having a maximum value of 100.  
+
+<br>
+<br>
+
+
+ 
+
+
+
+
+
+<h2> <b> Title: Index </h2> </b> <br> 
+<b>Description: </b> <br> 
+Index is a database object used to indexes a table in database. An Oracle index is used to speed up the retrieval of rows by using a pointer. Indexes can be created automatically or explicitly. Index helps for a whole table scan no to happen every time. 
+<br>
+<b>Implementation:</b> <br>
+An example of Index implementation can be: <br>
+CREATE INDEX Student_name <br>
+		ON student(last_name); <br>
+
+<b>Code Explanation: </b> <br> 
+An index provides direct and fast access to rows in a table. Its purpose is to reduce the necessity of disk I/O by using an indexed path to locate data quickly. Indexes are logically and physically independent of the table they index. This means that they can be created or dropped at any time and have no effect on the base tables or other indexes.
+
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+<h2> <b>Title: Cursor </h2> </b> <br> 
+<b>Description: </b> <br> A database cursor is an object used to pinpoint records in a database. It shows you the specific record in a database that is being worked upon. 
+<br>
+<b>Implementation: </b> <br>
+An example of Cursor implementation can be:<br>
+DECLARE @studentid as INT;<br>
+DECLARE @firstName as varchar(50), <br>
+        @lastName as varchar(50); <br>
+DECLARE @stcursor as CURSOR;<br>
+SET @stcursor = CURSOR FOR<br>
+    SELECT studentid,<br>
+           FirstName,<br>
+           LastName<br>
+    FROM  Student.Student<br>
+    OPEN @stcursor<br>
+FETCH NEXT FROM @stcursor INTO @studentid, <br> 
+                                   @firstName, <br>
+                                   @lastName <br>
+WHILE @@FETCH_STATUS = 0 <br>
+BEGIN<br>
+   PRINT cast(@studentid as VARCHAR (50)) <br>
+         + ' - ' + @firstName<br>
+         + ' ' + @lastName;<br>
+   FETCH NEXT FROM @stcursor INTO @studentid, <br> 
+                                      @firstName, <br>
+                                      @lastName <br>
+END <br>
+CLOSE @stcursor; DEALLOCATE @stcursor; <br>
+<b>Code Explanation: </b><br>
+We use cursor to iterate or move from one row to the next and updating rows as we go.  If we encounter an error, try something else, or skip the operation.  The difference is, that when you use cursors, you can act on each row. The print statement sends output to the SQL Server Management Studio Message Window.
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> <b>Title: Package </b></h2> <br>  
+<b>Description: </b> <br>
+Packages provide a method of encapsulating related procedures, functions, and associated cursors and variables together as a unit in the database.
+<br>
+<b>Implementation: </b> <br>
+An example of Package implementation can be: <br>
+CREATE PACKAGE BODY bank_transactions AS <br>
+		new_status  CHAR(20); <br>
+
+PROCEDURE do_journal_entry (acct NUMBER, <br> 
+				kind CHAR) IS <br>
+BEGIN <br>
+	INSERT INTO journal <br>
+	  VALUES (acct, kind, sysdate); <br> 
+	IF kind = 'D' THEN <br>
+	  new_status := 'Debit applied'; <br> 
+	ELSIF kind = 'C' THEN <br>
+	  new_status := 'Credit applied'; <br> 
+	ELSE <br>
+	  new_status := 'New account';  <br>
+	END IF; <br>
+  END do_journal_entry; <br> 
+
+
+<b>Code Explanation:</b> <br> 
+While packages allow the database administrator or application developer to organize similar routines, they also offer increased functionality and database performance. 
+<br>
+<br>
+
+<h2> <b> Title: Procedure </h2> </b> <br>   
+<b>Description: </b> <br>
+A procedure is a group of PL/SQL statements that you can call by name. Stored procedures offer advantages in the areas of development, integrity, security, performance, and memory allocation.
+<br>
+<b>Implementation:</b> <br>
+An example of Procedure implementation can be: <br>
+CREATE PROCEDURE remove_emp (employee_id NUMBER) AS <br>
+   tot_emps NUMBER;<br>
+   BEGIN<br>
+      DELETE FROM employees<br>
+      WHERE employees.employee_id = remove_emp.employee_id;<br>
+   tot_emps := tot_emps - 1;<br>
+   END;<br>
+
+<b>Code Explanation:</b> <br> 
+The remove_emp procedure removes a specified employee. When you call the procedure, you must specify the employee_id of the employee to be removed.
+The procedure uses a DELETE statement to remove from the employees table the row of employee_id.
+<br>
+<br>
+
+
+
+
+
+
+<h2><b>Title: Function </h2></b> <br>   
+<b>Description:</b> <br> 
+
+A stored function (also called a user function or user-defined function) is a set of PL/SQL statements you can call by name. Stored functions are very similar to procedures, except that a function returns a value to the environment in which it is called. User functions can be used as part of a SQL expression.
+<br>
+<b>Implementation:</b> <br>
+An example of Function implementation can be: <br>
+CREATE FUNCTION get_bal(acc_no IN NUMBER) <br>
+   RETURN NUMBER <br>
+   IS acc_bal NUMBER(11,2); <br>
+   BEGIN <br>
+      SELECT order_total <br> 
+      INTO acc_bal <br>
+      FROM orders <br>
+      WHERE customer_id = acc_no; <br> 
+      RETURN(acc_bal); <br>
+    END;<br>
+
+<b>Code Explanation:</b><br> 
+The get_bal function returns the balance of a specified account.
+When you call the function, you must specify the argument acc_no. The function returns the account balance. The function uses a SELECT statement to select the balance column from the row identified by the argument acc_no in the orders table. The function uses a RETURN statement to return this value to the environment in which the function is called.
+<br>
+<br>
+
+
+<h2> <b> Title: Database Link </h2> </b> <br>   
+<b>Description: </b> <br>
+A database link is a schema object in one database that enables you to access objects on another database. The databases doesn’t need to an oracle Database system. 
+<br>
+<b>Implementation: </b> <br>
+An example of Database Link implementation can be:<br>
+CREATE DATABASE LINK remote.us.oracle.com<br>
+   CONNECT TO CURRENT_USER<br>
+   USING 'remote';<br>
+<b>
+Code Explanation: </b> <br>
+The above statement defines a current-user database link to the remote database. The user who issues this statement must be a global user registered with the LDAP directory service.
+<br>
+<br>
+
+
+<h2><b>Title: Objects </h2> </b> <br>   
+<b>Description:</b> <br> 
+Oracle Database recognizes objects that are associated with a particular schema and objects that are not associated with a particular schema. Examples of Schema Objects are: Database Links, triggers, indexes, tables, views, packages, sequences etc. Examples of Nonschema Objects are: Users, roles, profiles, etc. 
+<br>
+<br>
+<h2><b>Title: Primary Key </h2> </b> <br>   
+<b>Description:</b> <br> 
+The PRIMARY KEY constraint uniquely identifies each record in a table. Primary keys must contain UNIQUE values, and cannot contain NULL values. A table can have only one primary key, which may consist of single or multiple fields.
+<br>
+<b>Implementation: </b> <br>
+An example of Primary Key implementation can be: <br>
+CREATE TABLE student ( <br>
+	ID int NOT NULL PRIMARY KEY, <br>
+	LastName varchar(10), <br>
+	FirstName varchar(23), <br>
+	Age int); <br>
+
+<b>Code Explanation: </b> <br>
+This will set the student ID as it’s uniquely identifier as it’s set as a primary key.
+<br> 
+<br>
+
+
+<h2> <b>Title: Unique Key </h2> </b> <br>   
+<b>Description: <br> </b>
+A unique key is a set of one or more than one fields/columns of a table that uniquely identify a record in a database table. You can say that it is little like primary key but it can accept only one null value and it cannot have duplicate values. The unique key and primary key both provide a guarantee for uniqueness for a column or a set of columns. There is an automatically defined unique key constraint within a primary key constraint. There may be many unique key constraints for one table, but only one PRIMARY KEY constraint for one table.
+<br>
+<b>Implementation: </b> <br>
+An example of Unique Key implementation can be: <br>
+CREATE TABLE student ( <br>
+	ID int NOT NULL UNIQUE,<br>
+	LastName varchar(10),<br>
+	FirstName varchar(23),<br>
+	Age int);<br>
+<b>
+Code Explanation: </b> <br> 
+This will set the student ID as it’s uniquely identifier.
+
+<br>
+<br>
+
+<h2> <b> 
+Title: NOT NULL </h2> </b> <br>   
+<b>Description: </b> <br>
+The NOT NULL constraint enforces a column to NOT accept NULL values. This enforces a field to always contain a value, which means that you cannot insert a new record, or update a record without adding a value to this field.
+<br>
+<b>Implementation:</b> <br>
+An example of NOT NULL implementation can be: <br>
+CREATE TABLE student (<br>
+	ID int NOT NULL ,<br>
+	LastName varchar(10),<br>
+	FirstName varchar(23),<br>
+	Age int);<br>
+<b>
+Code Explanation: </b> <br> 
+This will set that student ID can’t be a null value.   
+<br>
+   
+   <br>
+<h2> <b>Title: Check </h2> </b> <br>   
+<b>Description: </b> <br>
+Checks the integrity of a database.
+<br>
+<b>Implementation: </b> <br>
+An example of Check implementation can be: <br>
+CHECK DATABASE [--skip-graph] [-v] <br>
+<b>
+Code Explanation: </b> <br> 
+[-- skip - graph] will skip the check of the graph. It check the integrity of the database. 
+<br>
+<br>
+
+<h2> <b> 
+Title: Foreign Key </h2> </b> <br>   
+<b>Description:</b> <br> 
+A FOREIGN KEY is a key used to link two tables together. A FOREIGN KEY is a field (or collection of fields) in one table that refers to the PRIMARY KEY in another table. The table containing the foreign key is called the child table, and the table containing the candidate key is called the referenced or parent table.
+<br>
+<b>Implementation:</b><br>
+An example of Foreign Key implementation can be: <br>
+CREATE TABLE Orders (<br>
+    OrderID int NOT NULL,<br>
+    OrderNumber int NOT NULL,<br>
+    PersonID int,<br>
+    PRIMARY KEY (OrderID),<br>
+    FOREIGN KEY (PersonID) REFERENCES Persons(PersonID)<br>
+);<br>
+<b>
+Code Explanation: </b> <br> 
+It creates a foreign key on the “person ID” column when the “orders” table is created. 
+<br>
+<br>
+
+
+
+<h2><b> Relational Database Vs. Object Oriented Database: </h2> </b> <br> 
+The difference between relational database and object oriented database is that the relational data base stores data in the form of tables which contains rows and columns. Every column in the table has its specific name and every row of the table has its own primary key. While in the object oriented database the data is stored in the form of objects. In the object oriented data, the data is stored along with its actions that processes or reads the existing data. 
+<br>
+
+
+</body>
+</html>
